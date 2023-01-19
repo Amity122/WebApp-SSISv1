@@ -1,0 +1,90 @@
+{% extends "base.html"%} {% block title %} Add Courses {% endblock %} {% block content
+    %}
+<br/>
+{% for message in get_flashed_messages()%}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+           <strong>{{message}}</strong> 
+           <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        
+    
+    {% endfor %}
+ 
+<form method="POST">
+    {{form.hidden_tag()}}
+    <div class="shadow p-3 mb-5 bg-body rounded">
+        <h3 align="CENTER">Add Student</h3>
+    {{form.id_number.label(class="form-label")}}
+    {{form.id_number(class="form-control", placeholder="Enter ID Number (YYYY-NNNN)")}}
+    <br/>
+    {{form.first_name.label(class="form-label")}}
+    {{form.first_name(class="form-control", placeholder="Enter First Name")}}
+    <br/>
+    {{form.last_name.label(class="form-label")}}
+    {{form.last_name(class="form-control", placeholder='Enter Last Name')}}
+    <br/>
+    {{form.college.label(class="form-label")}}
+    {{form.college(class="custom-select")}}
+    <br/>
+    {{form.course.label(class="form-label")}}
+    {{form.course(class="custom-select")}}
+    <br/>
+    {{form.year_level.label(class="form-label")}}
+    {{form.year_level(class="custom-select")}}
+    <br/>
+    {{form.gender.label(class="form-label")}}
+    {{form.gender(class="custom-select")}}
+    <br/>
+    <br/>
+    {{form.submit(class="btn btn-success")}}
+</div>
+    <br/><br/><br/>
+    <div class="shadow p-3 mb-5 bg-body rounded">
+    <table class="table table-striped table-hover table-bordered ">
+        <thead>
+            <tr>
+                <th scope="col">ID Number</th>
+                <th scope="col">First Name</th>
+                <th scope="col">Last Name</th>
+                <th scope="col">Course</th>
+                <th scope="col">College</th>
+                <th scope="col">Gender</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for student in all_students %}
+        <tr>
+            <td>{{student.id}}</td>
+            <td>{{student.first_name}}</td>
+            <td>{{student.last_name}}</td>
+            <td>{{student.course}}</td>
+            <td>{{student.college}}</td>
+            <td>{{student.gender}}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+    </div>
+<script type="text/javascript">
+    let college_select = document.getElementById('college');
+let course_select = document.getElementById('course');
+
+college_select.onchange = function () {
+    college = college_select.value;
+
+    fetch('/home/add-student/course/' + college).then(function (response) {
+        response.json().then(function (data) {
+            let optionHTML = '';
+            for (let course of data.courses) {
+                optionHTML += '<option value="' + course.course_code + '">' + course.course_name + '</option>'
+            }
+
+            course_select.innerHTML = optionHTML;
+        });
+    });
+}
+</script>
+        {% endblock %}

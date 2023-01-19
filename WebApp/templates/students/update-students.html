@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+<head> 
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link
+rel="stylesheet"
+href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+crossorigin="anonymous"
+/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
+<script
+      src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+      integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+      integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+      crossorigin="anonymous"
+    ></script>
+<title>Home</title>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-toggle="collapse"
+      data-target="#navbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar">
+      <div class="navbar-nav">
+        <a class="nav-item nav-link" id="home" href="/">Home</a>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Colleges
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" id="add_colleges" href="/add-colleges"
+              >Add College</a
+            >
+            <a class="dropdown-item" id="update_colleges" href="/update-colleges">Update Colleges</a>
+            <a class="dropdown-item" id="delete_colleges" href="/delete-colleges">Delete Colleges</a>
+          </div>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Courses
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" id="add_courses" href="/add-courses"
+              >Add Courses</a
+            >
+            <a class="dropdown-item" id="update_courses" href="/update-courses">Update Courses</a>
+            <a class="dropdown-item" id="delete_courses" href="/delete-courses">Delete Courses</a>
+          </div>
+        </li>
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link dropdown-toggle"
+            href="#"
+            id="navbarDropdown"
+            role="button"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            Student
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" id="add_student" href="/add-student"
+              >Add Student</a
+            >
+            <a class="dropdown-item" id="update_student" href="/update-student">Update Student</a>
+            <a class="dropdown-item" id="delete_student" href="/delete-student" target="_blank">Delete Student</a>
+          </div>
+        </li>
+      </div>
+    </div>
+  </nav>
+
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+<body>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 mt-5">
+      {% for message in get_flashed_messages()%}
+  
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+          <strong>{{message}}</strong> 
+          <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+          
+      {% endfor %}
+      <div class="shadow p-3 mb-5 bg-body rounded">
+        <h5 align="Center">Click Student ID to Update</h5>
+        <table id="example2" class="table table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th scope="col">ID Number</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Course</th>
+                    <th scope="col">College</th>
+                    <th scope="col">Year Level</th>
+                    <th scope="col">Gender</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in all_students %}
+                    <tr>
+                        <td>
+                            <button class="btn btn-sm btn-info" data-toggle="modal" data-target="#editStudentModal{{student.id}}">
+                                {{student.id}}
+                            </button>
+                        </td>
+                        <td>{{student.first_name}}</td>
+                        <td>{{student.last_name}}</td>
+                        <td>{{student.course}}</td>
+                        <td>{{student.college}}</td>
+                        <td>{{student.year_lvl}}</td>
+                        <td>{{student.gender}}</td>
+                    </tr>
+                {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% for student in all_students %}
+        <div class="modal fade" id="editStudentModal{{student.id}}" tabindex="-1" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title">Edit College</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="/home/update-student/{{student.id}}" method="POST">
+                    {{form.new_id_number.label(class="form-label")}}
+                    {{form.new_id_number(class="form-control", placeholder="Enter New ID Number (YYYY-NNNN)", value=student.id)}}
+                    <br/>
+                    {{form.new_first_name.label(class="form-label")}}
+                    {{form.new_first_name(class="form-control", placeholder="Enter New First Name", value=student.first_name)}}
+                    <br/>
+                    {{form.new_last_name.label(class="form-label")}}
+                    {{form.new_last_name(class="form-control", placeholder='Enter New Last Name', value=student.last_name)}}
+                    <br/>
+                    {{form.new_college.label(class="form-label")}}
+                    {{form.new_college(class="custom-select", value=student.college)}}
+                    <br/>
+                    {{form.new_course.label(class="form-label")}}
+                    {{form.new_course(class="custom-select", value=student.course)}}
+                    <br/>
+                    {{form.new_year_level.label(class="form-label")}}
+                    {{form.new_year_level(class="custom-select", value=student.year_lvl)}}
+                    <br/>
+                    {{form.new_gender.label(class="form-label")}}
+                    {{form.new_gender(class="custom-select")}}
+                    <br/>
+                    <br/>
+                    {{form.submit(class="btn btn-primary")}}
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+$(document).ready(function () {
+// Setup - add a text input to each footer cell
+$('#example2 tfoot th').each(function () {
+    var title = $(this).text();
+    $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+});
+
+// DataTable
+var table = $('#example2').DataTable({
+    initComplete: function () {
+        // Apply the search
+        this.api()
+            .columns()
+            .every(function () {
+                var that = this;
+
+                $('input', this.footer()).on('keyup change clear', function () {
+                    if (that.search() !== this.value) {
+                        that.search(this.value).draw();
+                    }
+                });
+            });
+    },
+});
+});
+</script>
+<style>
+    tfoot input {
+        width: 100%;
+        padding: 3px;
+        box-sizing: border-box;
+    }
+   
+      body {
+        background-image: url('../../static/img/bg.jpg');
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-size: 100% 100%;
+      }
+    .shadow {
+        background-color: white;
+    }
+
+</style>
+<script type="text/javascript">
+    let college_select = document.getElementById('new_college');
+let course_select = document.getElementById('new_course');
+
+college_select.onchange = function () {
+    college = college_select.value;
+
+    fetch('/home/add-student/course/' + college).then(function (response) {
+        response.json().then(function (data) {
+            let optionHTML = '';
+            for (let course of data.courses) {
+                optionHTML += '<option value="' + course.course_code + '">' + course.course_name + '</option>'
+            }
+
+            course_select.innerHTML = optionHTML;
+        });
+    });
+}
+</script>
+</body>
+</html>
